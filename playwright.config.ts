@@ -13,7 +13,7 @@ const config: PlaywrightTestConfig = {
         navigationTimeout: 60*1000
     },
 
-    workers: 1,
+    workers: 3,
     fullyParallel: true,
     reporter: [
         ['html'],
