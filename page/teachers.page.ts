@@ -16,21 +16,23 @@ export class Teachers extends BasePage {
     }
 
     async isTeacherCard1() {
-        await this.teacherCard1.isVisible();
-        return this.teacherCard1;
+        const a = await this.teacherCard1.isVisible();
+        return a;
     }
 
     async isTeacherCard2() {
-        await this.teacherCard2.isVisible();
-        return this.teacherCard2;
+      const b =   await this.teacherCard2.isVisible();
+        return b;
     }
 
     async clickSlider1() {
-        await this.slider1.click();
+        const c = await this.slider1.click();
+        return c;
     }
 
     async clickSlider2() {
-        await this.slider2.click();
+      const d =  await this.slider2.click();
+        return d
     }
 }
 
