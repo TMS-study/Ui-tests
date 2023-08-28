@@ -1,0 +1,26 @@
+фреймворк:
+- page object, factory
+- allure, html
+- github actions
+
+Page object
+- базовая
+- логин
+- либо в одной хоум пейдже, либо разделить ( например блок аттесатции отдельно, блок поступления отедльно) -подумать
+- спеки также - либо одну, либо разделить по блокам - подумать
+
+ test.only('Submit an bid for admission', async () => {
+        name = await startLearn.inputNameParent('Иван Иванов');
+        phone = await startLearn.inputPhoneParent('89211222323');
+    });
+
+
+    import { test, expect } from '@playwright/test';
+
+test('test', async ({ page }) => {
+  await page.goto('https://foxford.ru/home-school');
+  await page.locator('form').filter({ hasText: 'Класс ученикаУдобный способ общенияПринимаю условия соглашения и даю согласие на' }).locator('g rect').click();
+});
+
+  // "test1": "npx playwright test tests/begin.study.spec.ts --headed",
+    // "test2": "npx playwright test tests/enroll.now.spec.ts --headed",
