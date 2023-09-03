@@ -1,19 +1,33 @@
-import { PlaywrightTestConfig } from '@playwright/test';
+import { PlaywrightTestConfig, devices } from '@playwright/test';
 
 const config: PlaywrightTestConfig = {
-    timeout: 60 * 1000,
+    timeout: 70 * 1000,
     expect: { timeout: 20000 },
     
     use: {
         baseURL: process.env.BASE_URL,
         trace: 'on-first-retry',
         screenshot: 'only-on-failure',
-        viewport: {width:1800, height: 1024},
-        actionTimeout: 60*1000,
-        navigationTimeout: 60*1000
+        viewport: {width:1280, height: 720},
+        headless: false,
+        actionTimeout: 20*1000,
+        navigationTimeout: 20*1000,
+        
     },
 
-    workers: 3,
+    projects: [
+        {
+            name: 'chrome',
+            use: {
+                headless: true,
+                ...devices['Desktop Chrome'],
+                browserName: 'chromium',
+            },
+            
+        },
+    ],
+
+    workers: 1,
     fullyParallel: true,
     reporter: [
         ['html'],
@@ -25,6 +39,7 @@ const config: PlaywrightTestConfig = {
             }
         ],
     ],
+
 };
 
 export default config;

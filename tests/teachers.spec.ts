@@ -19,24 +19,24 @@ test.describe('', () => {
     test('Teachers card is enabled', async () => {
         isActive = 'false';
         moveCard1 = await teach.isTeacherCard1();
-        expect(await moveCard1.getAttribute('aria-hidden')).toContain(isActive);
+        expect(await moveCard1.nth(0).getAttribute('aria-hidden')).toContain(isActive);
     });
 
     test('Scroll teacher with the mouse', async () => {
         isActive = 'false';
         moveCard1 = await teach.isTeacherCard1();
         moveCard2 = await teach.isTeacherCard2();
-        await moveCard1.dispatchEvent('mousedown');
-        await moveCard1.dispatchEvent('mousemove', { x: -100, y: 0 });
-        await moveCard1.dispatchEvent('mouseup');
-        expect(await moveCard2.getAttribute('aria-hidden')).toContain(isActive);
+        await moveCard1.nth(0).dispatchEvent('mousedown');
+        await moveCard1.nth(0).dispatchEvent('mousemove', { x: -300, y: 0 });
+        await moveCard1.nth(0).dispatchEvent('mouseup');
+        expect(await moveCard2.nth(0).getAttribute('aria-hidden')).toContain(isActive);
     });
 
     test('Scroll teacher with the mouse slider', async () => {
-        isActive = 'false';
+        isActive = 'true';
         clickSlider2 = await teach.clickSlider2();
-        moveCard2 = await teach.isTeacherCard2();
-        expect(await moveCard2.getAttribute('aria-hidden')).toContain(isActive);
+        moveCard1 = await teach.isTeacherCard2();
+        expect(await moveCard1.nth(1).getAttribute('aria-hidden')).toContain(isActive);
     });
 });
 

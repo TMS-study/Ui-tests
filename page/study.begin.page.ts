@@ -1,14 +1,13 @@
 
 import BasePage from "./base.page";
-import { Locator, Page, test } from "@playwright/test";
+import { Locator, Page } from "@playwright/test";
 
 
 export class StudyBegin extends BasePage {
     private readonly nameParent: Locator;
     private readonly phoneParent: Locator;
     private readonly emailParent: Locator;
-    public readonly classStudent: Locator;
-    private readonly methodTreatment: Locator;
+   
     private readonly requestAgreement: Locator;
     private readonly buttonBid: Locator;
     private readonly linkTermsAgreementt: Locator;
@@ -16,14 +15,19 @@ export class StudyBegin extends BasePage {
     private readonly linkPrivacyPolicies: Locator;
     private readonly errorEmail: Locator;
     private readonly happyState: Locator;
+    private readonly selectArrow: Locator;
+    private readonly callMe: Locator;
+    private readonly writeMeEmail: Locator;
+    private readonly writeMeMessenger: Locator;
+    private readonly choosedClass: Locator;
+
 
     constructor(page: Page) {
         super(page);
         this.nameParent = page.locator('//input[@placeholder = "Имя и фамилия родителя"]');
         this.phoneParent = page.locator('//input[@placeholder = "Телефон родителя"]');
         this.emailParent = page.locator('//form[contains(@class, "styled__Form-cNRRKJ")]//input[@placeholder="Электронная почта"]');
-        this.classStudent = page.getByText('//form[contains(@class, "styled__Form-cNRRKJ")]//div[contains(@class, "Select--single")]');
-        this.methodTreatment = page.getByText('//form[contains(@class, "styled__Form-cNRRKJ")]//div[contains(@class, "Select--single")]');
+        this.selectArrow = page.locator('//span[@class="Select-arrow-zone"]');
         this.requestAgreement = page.locator('form').filter({ hasText: 'Класс ученикаУдобный способ общенияПринимаю условия соглашения и даю согласие на' }).locator('g rect')
         this.buttonBid = page.getByText('Оставить заявку');
         this.linkTermsAgreementt = page.locator('//form[contains(@class, "styled__Form-cNRRKJ")]//*[contains(text(), "условия соглашения")]');
@@ -31,6 +35,10 @@ export class StudyBegin extends BasePage {
         this.linkPrivacyPolicies = page.locator('//form[contains(@class, "styled__Form-cNRRKJ")]//*[contains(text(), "политики конфиденциальности")]');
         this.errorEmail = page.locator('//form[contains(@class, "styled__Form-cNRRKJ")]//*[contains(text(), "Введите почту")]')
         this.happyState = page.locator('//div[@data-qa="request_Styled.Success"]');
+        this.callMe = page.getByLabel('Позвоните мне');
+        this.writeMeEmail = page.getByLabel('Напишите мне письмо');
+        this.writeMeMessenger = page.getByLabel('Напишите мне в WhatsApp или Telegram');
+        this.choosedClass = page.locator('//span[@class="Select-value-label"]');
     }
 
 
@@ -60,47 +68,55 @@ export class StudyBegin extends BasePage {
         return email;
     };
 
-    async chooseClassStudent() {
-        const but = this.classStudent.first();
-        const buttons = await but.all();
-        const isEnabledArray = await Promise.all(buttons.map(async (button) => await button.isEnabled()));
-        return isEnabledArray;
+    async selectClasses(classNames: string[]) {
+        for (const className of classNames) {
+            await this.selectArrow.first().click();
+            await this.page.getByLabel(className).click();
+        }
+        return true
     }
-    
+
+    async chooseVisible() {
+        const classNum = await this.choosedClass.isVisible()
+        return classNum;
+    }
+
     async chooseMethodTreatment() {
-        const but = this.methodTreatment.last();
-        const buttons = await but.all();
-        const isEnabledArray = await Promise.all(buttons.map(async (button) => await button.isEnabled()));
-        return isEnabledArray;
-    };
+        const methods = [this.callMe, this.writeMeEmail, this.writeMeMessenger];
+        for (const method of methods) {
+            await this.selectArrow.last().click();
+            await method.click();
+        }
+        return true;
+    }
 
     async chooseRequestAgreement() {
         const check = await this.requestAgreement
         return check;
     }
 
-
-    async clickButtonBid() {
-        this.buttonBid.click();
-        return this.buttonBid;
-    };
-
-
     async clickLinkTermsAgreementt() {
-        this.linkTermsAgreementt.click();
+        await this.linkTermsAgreementt.click();
     };
 
 
     async clickLinkPersonalData() {
-        this.linkPersonalData.click();
+        await this.linkPersonalData.click();
     };
 
     async clickLinkPrivacyPolicies() {
-        this.linkPrivacyPolicies.click();
+        await this.linkPrivacyPolicies.click();
     };
 
     async isHappyState() {
-        this.happyState.isVisible()
-        return this.happyState;
+        const happyState = await this.happyState.isVisible();
+        //console.log('isHappyState:', happyState); // Добавьте этот вывод
+        return happyState;
     }
+
+    async clickButtonBid() {
+        const but = await this.buttonBid.click();
+        //console.log('clickButtonBid'); // Добавьте этот вывод
+        return but
+    };
 }
